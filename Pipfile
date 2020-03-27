@@ -10,6 +10,7 @@ pylint = "*"
 sqlalchemy = "*"
 psycopg2-binary = "*"
 datetime = "*"
+postgresql = "*"
 
 [requires]
 python_version = "3.6"

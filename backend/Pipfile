@@ -6,6 +6,10 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
+flask = "*"
+marshmallow = "*"
+sqlalchemy = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"

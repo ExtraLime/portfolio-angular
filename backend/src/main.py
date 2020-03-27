@@ -1,22 +1,48 @@
 from __future__ import absolute_import
-from entities.entity import Session, engine, Base
-from entities.exam import Project
+
+from flask import Flask, jsonify, request
+
+from .entities.entity import Session, engine, Base
+from .entities.exam import Project, ExamSchema
+
+
+app = Flask(__name__)
 
 Base.metadata.create_all(engine)
 
-session = Session()
+@app.route('/projects')
 
-projects = session.query(Project).all()
+def get_projects():
+    #start sessions
+    session = Session()
+    #fetch all data
+    proj_obs = session.query(Project).all()
+    #transform to be json-readable
+    schema = ExamSchema(many=True)
+    projects = schema.dump(proj_obs)
 
-if len(projects) == 0:
-    python_project = Project('PDXcrimemap.net','Visualize live crime in PDX','script')
-
-    session.add(python_project)
-    session.commit()
+    #serialize as JSON
     session.close()
 
-    projects = session.query(Project).all()
+    return jsonify(projects)
 
-print('### Projects:')
-for project in projects:
-    print(f'{project.id} {project.description}')
+
+@app.route('/projects', methods=['POST'])
+def add_project():
+
+    posted_proj = ExamSchema(only=('title','description'))\
+        .load(request.get_json())
+
+    project = Project(**posted_proj, created_by='HTTP post request')
+
+    session = Session()
+    session.add(project)
+
+    session.commit()
+
+    new_project = ExamSchema().dump(project)
+    session.close()
+
+    return jsonify(new_project), 201
+
+
