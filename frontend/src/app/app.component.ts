@@ -1,32 +1,14 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {Subscription} from 'rxjs/Subscription';
-import {ProjectsApiService} from './projects/projects-api.services';
-import {Project} from './projects/project.model';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <div style="text-align:center">
+      <h1>Projects</h1>
+    </div>
+    <h2>Here are the projects created so far: </h2>
+    <router-outlet></router-outlet>
+  `,
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
-  title = 'app';
-  ProjectListSubs: Subscription;
-  ProjectList: Project[];
-
-  constructor(private projectsApi: ProjectsApiService) {
-  }
-
-  ngOnInit() {
-    this.ProjectListSubs = this.projectsApi
-      .getProjects()
-      .subscribe(res => {
-          this.ProjectList = res;
-        },
-        console.error
-      );
-  }
-
-  ngOnDestroy() {
-    this.ProjectListSubs.unsubscribe();
-  }
-}
+export class AppComponent { }
