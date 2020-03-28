@@ -6,6 +6,8 @@ from flask_cors import CORS
 from .entities.entity import Session, engine, Base
 from .entities.exam import Project, ExamSchema
 
+from .auth import AuthError, requires_auth
+
 #create app
 app = Flask(__name__)
 #cross-origin
@@ -32,6 +34,7 @@ def get_projects():
 
 
 @app.route('/projects', methods=['POST'])
+@requires_auth
 def add_project():
 
     posted_proj = ExamSchema(only=('title','description'))\
@@ -49,4 +52,8 @@ def add_project():
 
     return jsonify(new_project), 201
 
-
+@app.errorhandler(AuthError)
+def handle_auth_error(ex):
+    response = jsonify(ex.error)
+    response.status_code = ex.status_code
+    return response
