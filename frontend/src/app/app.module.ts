@@ -1,3 +1,10 @@
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import { MatButtonModule} from '@angular/material/button';
+
+import { MatToolbarModule} from '@angular/material/toolbar';
+import { MatCardModule} from '@angular/material/card';
+
+
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
@@ -9,7 +16,8 @@ import {ProjectFormComponent} from './projects/project-form.component';
 import {RouterModule, Routes} from '@angular/router';
 import {ProjectsComponent} from './projects/projects.component';
 import { CallbackComponent } from './projects/callback.component';
-import * as Auth0 from 'auth0-web'
+import * as Auth0 from 'auth0-web';
+
 
 const appRoutes: Routes = [
   { path: 'new-project', component: ProjectFormComponent },
@@ -30,6 +38,10 @@ const appRoutes: Routes = [
     RouterModule.forRoot(
       appRoutes,
     ),
+    NoopAnimationsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatCardModule,
   ],
   providers: [ProjectsApiService],
   bootstrap: [AppComponent]

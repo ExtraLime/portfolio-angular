@@ -7,18 +7,29 @@ import {ProjectsApiService} from './projects-api.services';
 @Component({
   selector: 'projects',
   template: `
-    <div>
-      <button routerLink="/new-project">New Project</button>
-      <button (click)="signIn()" *ngIf="!authenticated">Sign In</button>
-      <button (click)="signOut()" *ngIf="authenticated">Sign Out</button>
-      <p *ngIf="authenticated">Hello, {{getProfile().name}}</p>
-      <ul>
-        <li *ngFor="let project of projectsList">
-          {{project.title}}
-        </li>
-      </ul>
+  <h2>Projects</h2>
+    <p>Choose an exam and start studying.</p>
+    <div class="projects">
+      <mat-card class="example-card" *ngFor="let project of projectsList" class="mat-elevation-z5">
+        <mat-card-content>
+          <mat-card-title>{{project.title}}</mat-card-title>
+          <mat-card-subtitle>{{project.description}}</mat-card-subtitle>
+          <p>
+            Etiam enim purus, vehicula nec dapibus quis, egestas eu quam.
+            Nullam eleifend auctor leo, vitae rhoncus mi sodales vel.
+            Aenean fermentum laoreet volutpat. Integer quam orci,
+            molestie non nibh suscipit, faucibus euismod sapien.
+          </p>
+          <button mat-raised-button color="accent">See Project</button>
+        </mat-card-content>
+      </mat-card>
     </div>
-  `
+    <button mat-fab color="primary" *ngIf="authenticated"
+            class="new-project" routerLink="/new-project">
+      <i class="material-icons">note_add</i>
+    </button>
+  `,
+  styleUrls: ['projects.component.scss'],
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   projectsListSubs: Subscription;
@@ -26,10 +37,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   authenticated = false;
 
   constructor(private projectsApi: ProjectsApiService) { }
-
-  signIn = Auth0.signIn;
-  signOut = Auth0.signOut;
-  getProfile = Auth0.getProfile;
 
   ngOnInit() {
     this.projectsListSubs = this.projectsApi
